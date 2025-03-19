@@ -35,7 +35,7 @@ export const EntryList: React.FC = () => {
       {entries && entries.length > 0 && (
         <FlatList
           data={entries}
-          keyExtractor={(item) => item.id?.toString() ?? ""}
+          keyExtractor={(item, index) => item.id?.toString() ?? index.toString()}
           renderItem={renderItem}
         />
       )}

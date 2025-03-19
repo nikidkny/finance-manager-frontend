@@ -11,12 +11,7 @@ export const CreateEntry: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = () => {
-    const newEntry = new EntryEntity(
-      Date.now(),
-      title,
-      parseFloat(amount),
-      new Date().toISOString()
-    );
+    const newEntry = new EntryEntity(title, parseFloat(amount), new Date().toISOString());
     dispatch(createEntry(newEntry));
   };
 
