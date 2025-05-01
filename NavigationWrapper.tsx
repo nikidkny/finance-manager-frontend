@@ -1,20 +1,19 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import { LoginScreen } from "./users/LoginScreen";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "./store/store";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SignupScreen } from "./users/SignupScreen";
+import { LoginScreen } from "./users/LoginScreen";
 import CategoryList from "./categories/CategoryList";
 import NewCategoryScreen from "./categories/NewCategoryScreen";
-import ProfileScreen from "./users/ProfileScreen";
-import { createStaticNavigation } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import { useDispatch, useSelector } from "react-redux";
-// import { RootState } from "./store/store";
-// import { reloadJwtFromStorage } from "./users/userSlice";
-// import * as SecureStore from "expo-secure-store";
-import { EntryList } from "./entries/EntryList";
-import { CreateEntry } from "./entries/CreateEntry";
-import { useDispatch, useSelector } from "react-redux";
+import { Counter } from "./counter/counter";
+import { createStaticNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store";
+import { reloadJwtFromStorage } from "./users/userSlice";
+import ProfileScreen from "./users/ProfileScreen";
+import EntriesMain from "./entries/EntriesListScreen";
 
 export type CategoryStackParamList = {
   CategoryList: undefined; // No parameters
@@ -22,10 +21,10 @@ export type CategoryStackParamList = {
   // CategoryDetails: { id: number }; // Example for a route with parameters
 };
 
-export type EntryStackParamList = {
-  EntryList: undefined; // No parameters
-  CreateEntry: undefined; // No parameters
-};
+// export type EntryStackParamList = {
+//   EntryList: undefined; // No parameters
+//   CreateEntry: undefined; // No parameters
+// };
 
 export type LoginSignupStackParamList = {
   SignupScreen: undefined; // No parameters
@@ -39,12 +38,12 @@ const LoginSignupStack = createNativeStackNavigator<LoginSignupStackParamList>({
   },
 });
 
-const EntryStack = createNativeStackNavigator<EntryStackParamList>({
-  screens: {
-    EntryList: EntryList,
-    CreateEntry: CreateEntry,
-  },
-});
+// const EntryStack = createNativeStackNavigator<EntryStackParamList>({
+//   screens: {
+//     EntryList: EntryList,
+//     CreateEntry: CreateEntry,
+//   },
+// });
 
 const CategoryStack = createNativeStackNavigator<CategoryStackParamList>({
   screens: {
@@ -55,7 +54,7 @@ const CategoryStack = createNativeStackNavigator<CategoryStackParamList>({
 
 const HomeTabs = createBottomTabNavigator({
   screens: {
-    Entries: EntryStack,
+    Entries: EntriesMain,
     Categories: CategoryStack,
     Profile: ProfileScreen,
   },

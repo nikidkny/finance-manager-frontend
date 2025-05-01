@@ -6,16 +6,44 @@ import { useDispatch, useSelector } from "react-redux";
 import { createCategory } from "./categorySlice";
 import { CategoryEntity } from "./CategoryEntity";
 // import { CategoriesAPI } from './CategoriesAPI';
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 const NewCategoryScreen: React.FC = () => {
   const [title, setTitle] = useState("");
-  const dispatch = useDispatch<AppDispatch>();
-  const error = useSelector((state: RootState) => state.category.errormessage); // view subscribes to the store
+  // const dispatch = useDispatch<AppDispatch>();//redux
+  // const error = useSelector((state: RootState) => state.category.errormessage);//redux // view subscribes to the store
+
+  const queryClient = useQueryClient();
+  // Mutations
+  const mutation = useMutation({
+    mutationFn: async (newCategory: CategoryEntity) => {
+      console.log(newCategory);
+
+      const response = await fetch("http://10.0.0.8:3000/categories", {
+        method: "POST",
+        body: JSON.stringify(newCategory),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      console.log(response);
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      // Invalidate and refetch the categories query
+      queryClient.invalidateQueries({ queryKey: ["categories"] });
+    },
+  });
 
   const onCreateCategory = async () => {
     const newCategory = new CategoryEntity(title);
+    mutation.mutate(newCategory);
 
-    dispatch(createCategory(newCategory)); // dispatches an action (createCategory)
+    // dispatch(createCategory(newCategory));//redux // dispatches an action (createCategory)
     // try {
     //   const createdCategory = await CategoriesAPI.createCategory(newCategory);
 

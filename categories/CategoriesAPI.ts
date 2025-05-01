@@ -5,9 +5,15 @@ export class CategoriesAPI {
   static baseUrl = "http://10.0.0.8:3000/categories";
 
   static async getCategories() {
-    const response = await axios.get<CategoryEntity[]>(this.baseUrl);
+    console.log("calling " + CategoriesAPI.baseUrl);
 
-    return response.data;
+    try {
+      const response = await axios.get<CategoryEntity[]>(this.baseUrl);
+      console.log("response", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
   }
 
   static async createCategory(category: CategoryEntity) {

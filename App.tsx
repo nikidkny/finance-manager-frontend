@@ -5,12 +5,13 @@ import { StyleSheet, Text } from "react-native";
 // import { createStaticNavigation, NavigationContainer } from "@react-navigation/native";
 // import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import EntriesMain from "./entries/EntriesMain";
+import EntriesMain from "./entries/EntriesListScreen";
 import { store } from "./store/store";
 import { Provider } from "react-redux";
 // import { Counter } from "./counter/counter";
 // import { SignupScreen } from "./users/SignupScreen";
 import NavigationWrapper from "./NavigationWrapper";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // export type RootStackParamList = {
 //   CategoryList: undefined; // No parameters
@@ -47,16 +48,19 @@ import NavigationWrapper from "./NavigationWrapper";
 // const Navigation = createStaticNavigation(HomeTabs);
 
 // const LoginSignupScreens = createStaticNavigation(LoginSignupStack);
+const queryClient = new QueryClient();
 
 export default function App() {
   // const token = '';
 
   return (
-    <Provider store={store}>
-      {/* <NavigationContainer> */}
-      <NavigationWrapper />
-      {/* </NavigationContainer> */}
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        {/* <NavigationContainer> */}
+        <NavigationWrapper />
+        {/* </NavigationContainer> */}
+      </Provider>
+    </QueryClientProvider>
   );
 }
 

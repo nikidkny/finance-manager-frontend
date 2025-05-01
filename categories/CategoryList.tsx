@@ -1,21 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, Alert, Button } from "react-native";
+import { CategoryEntity } from "./CategoryEntity";
+import { CategoriesAPI } from "./CategoriesAPI";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store/store";
 import { fetchCategories } from "./categorySlice";
-import { CategoryStackParamList } from "../NavigationWrapper";
-import { CategoryEntity } from "./CategoryEntity";
-// import { CategoriesAPI } from './CategoriesAPI';
+import { RootStackParamList } from "../NavigationWrapper";
+import { useQuery } from "@tanstack/react-query";
+import { useGetCategories } from "./categoryQueries";
 
 const CategoryList: React.FC = () => {
   type NavigationProp = NativeStackNavigationProp<CategoryStackParamList, "CategoryList">;
   const navigation = useNavigation<NavigationProp>();
+  if (isLoading) return <ActivityIndicator />;
+  if (isError) return <Text>Error loading categories</Text>;
+  const {
+    isLoading,
+    isError,
+    data: categories,
+    error,
+  } = useQuery({
+    queryKey: ["categories"],
+    queryFn: async () => {
+      const response = await fetch("http://10.0.0.8:3000/categories");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    },
+  });
 
-  const categories = useSelector((state: RootState) => state.category.categories);
-  const dispatch = useDispatch<AppDispatch>();
-  console.log(categories);
+  // const categories = useSelector((state: RootState) => state.category.categories); //redux
+  // const dispatch = useDispatch<AppDispatch>();//redux
+  // console.log(categories);
 
   //   const [categories, setCategories] = useState<CategoryEntity[]>([]);
   //   const [loading, setLoading] = useState<boolean>(true);
@@ -35,7 +54,7 @@ const CategoryList: React.FC = () => {
   // Fetch categories on component mount
   useEffect(() => {
     // fetchCategories();
-    dispatch(fetchCategories());
+    // dispatch(fetchCategories()); //redux
   }, []);
 
   // Render a single category item
