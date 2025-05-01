@@ -14,6 +14,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import * as SecureStore from "expo-secure-store";
 import { EntryList } from "./entries/EntryList";
 import { CreateEntry } from "./entries/CreateEntry";
+import { useDispatch, useSelector } from "react-redux";
 
 export type CategoryStackParamList = {
   CategoryList: undefined; // No parameters
@@ -65,22 +66,23 @@ const Navigation = createStaticNavigation(HomeTabs);
 const LoginSignupScreens = createStaticNavigation(LoginSignupStack);
 
 export default function NavigationWrapper() {
-  // const token = useSelector((state: RootState) => state.user.token);
-  // const dispatch = useDispatch();
+  const token = useSelector((state: RootState) => state.user.token);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    // async function getValueFor() {
-    //   const userObj = JSON.parse((await SecureStore.getItemAsync("jwt")) || "");
-    //   console.log("userObj", userObj);
-    //   dispatch(reloadJwtFromStorage(userObj)); // in my code, I have no token
-    //   // Instead, do the login functionality and save the token instead of the user.
-    // }
-    // getValueFor();
-  }, []);
+    async function getValueFor() {
+      const token = JSON.parse((await SecureStore.getItemAsync("jwt")) || "");
+      console.log("token", token);
+      if (token) {
+        dispatch(reloadJwtFromStorage(token));
+      }
+    }
+    getValueFor();
+  }, [dispatch]);
 
   return (
     <>
-      {/* {token ? (
+      {token ? (
         <>
           <Navigation />
         </>
@@ -88,8 +90,7 @@ export default function NavigationWrapper() {
         <>
           <LoginSignupScreens />
         </>
-      )} */}
-      <Navigation />
+      )}
     </>
   );
 }

@@ -25,6 +25,6 @@ export class UsersAPI {
       body: JSON.stringify(userDto),
     });
     const data = await response.json();
-    return data;
+    return data.token;
   }
 }

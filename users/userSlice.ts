@@ -50,9 +50,8 @@ const userSlice = createSlice({
     builder.addCase(signup.fulfilled, (state, action) => {
       // Add user to the state array
       console.log("payload", action.payload);
-      // SecureStore.setItemAsync('object', JSON.stringify(action.payload));
-      // state.token = action.payload; // in login.fulfilled
-
+      SecureStore.setItemAsync("jwt", JSON.stringify(action.payload));
+      state.token = action.payload; // in login.fulfilled
       state.errormessage = "";
     }),
       builder.addCase(signup.rejected, (state, action) => {

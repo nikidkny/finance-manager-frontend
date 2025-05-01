@@ -1,15 +1,17 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 import { login, signup } from "./userSlice";
 import { CreateUserDto } from "./CreateUserDto";
 import { AppDispatch, RootState } from "../store/store";
+import { useNavigation } from "@react-navigation/native";
 
 interface LoginScreenProps {}
 
 export const LoginScreen: React.FC<LoginScreenProps> = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigation = useNavigation();
   const error = useSelector((state: RootState) => state.user.errormessage);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -31,6 +33,13 @@ export const LoginScreen: React.FC<LoginScreenProps> = () => {
         placeholder="Password"
       />
       <Button title="Login" onPress={handleSubmit} />
+      <Text style={styles.error}>{error}</Text>
+      <View style={styles.singupcontainer}>
+        <Text>Don't have an account?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate("SignupScreen")}>
+          <Text style={styles.link}>Sign up</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -47,5 +56,18 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  error: {
+    color: "red",
+  },
+  singupcontainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 10,
+    gap: 2,
+  },
+  link: {
+    color: "blue",
   },
 });
